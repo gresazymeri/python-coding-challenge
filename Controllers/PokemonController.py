@@ -1,17 +1,41 @@
 import pandas as panda
 import os
 from flask import request
+from sqlalchemy.sql import text
 
 class PokemonController:
     # Constructor
-    def __init__(self, dbConnection):
+    def __init__(self, dbConnection, pokemonModel):
         self.dbConnection = dbConnection
+        self.pokemonModel = pokemonModel
 
-    # Get all pokemons
+    # Get all pokemons from database
     def getAllFromDatabase(self):
-        result = {}
+        # Declare needed variables
+        pokemons = self.pokemonModel.query
 
-        return result
+        # Sorts
+        if(request.args.get('sortByDesc')):
+            columnToSort = request.args.get('sortByDesc')
+            pokemons = pokemons.order_by(text(columnToSort + ' desc'))
+        if(request.args.get('sortByAsc')):
+            columnToSort = request.args.get('sortByAsc')
+            pokemons = pokemons.order_by(text(columnToSort + ' asc'))
+
+        # Filters
+        if(request.args.get('filter[Type 1]')):
+            pokemons = pokemons.filter_by(Type1=request.args.get('filter[Type 1]'))
+        if(request.args.get('filter[Type 2]')):
+            pokemons = pokemons.filter_by(Type2=request.args.get('filter[Type 2]'))
+
+        # Fetch all
+        pokemons = pokemons.all()
+
+        # Convert to json
+        pokemons = [i.serialize for i in pokemons]
+
+        # Return final response
+        return pokemons
 
     # Get all pokemons from csv
     def getAllFromCsv(self):
@@ -31,7 +55,6 @@ class PokemonController:
         if(request.args.get('sortByDesc')):
             columnsToSort = request.args.get('sortByDesc').split(',')
             dataFrame = dataFrame.sort_values(by=columnsToSort, ascending=False)
-
         if(request.args.get('sortByAsc')):
             columnsToSort = request.args.get('sortByAsc').split(',')
             dataFrame = dataFrame.sort_values(by=columnsToSort, ascending=True)

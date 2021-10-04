@@ -15,11 +15,7 @@ A Client of the API should be able to:
 To install the project, you need to install those packages:
 
 ```bash
-pip3 install flask
-pip3 install pymysql
-pip3 install python-dotenv
-pip3 install pandas
-pip3 install sqlalchemy
+pip3 install flask pymysql python-dotenv pandas sqlalchemy flask_sqlalchemy
 ```
 
 ### Start app
@@ -62,6 +58,25 @@ Available query parameters:
 Example: `http://127.0.0.1:5000/csv/pokemons?sortByDesc=HP,Defense`.
 
 `sortByAsc` (To sort multiple columns in ascending order, all columns all available for sorting).
+Example: `http://127.0.0.1:5000/csv/pokemons?sortByAsc=HP,Defense`.
+
+`filter` (To filter Type 1 or Type 2 column, only Type 1 and Type 2 all available for filtering).
+Example: `http://127.0.0.1:5000/csv/pokemons?filter[Type 1]=Bug`.
+
+---
+
+---
+
+URL: http://127.0.0.1:5000/database/pokemons
+
+Description: Get all pokemons from the database.
+
+Available query parameters:
+
+`sortByDesc` (To sort specifc column in descending order).
+Example: `http://127.0.0.1:5000/csv/pokemons?sortByDesc=HP`.
+
+`sortByAsc` (To sort specifc column in ascending order).
 Example: `http://127.0.0.1:5000/csv/pokemons?sortByAsc=HP,Defense`.
 
 `filter` (To filter Type 1 or Type 2 column, only Type 1 and Type 2 all available for filtering).
